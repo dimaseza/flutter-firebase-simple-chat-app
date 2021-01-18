@@ -25,13 +25,16 @@ class AuthServices {
     }
   }
 
-  static Future signInWithEmailAndPassword(
+  static Future<auth.User> signInWithEmailAndPassword(
       String email, String password) async {
     try {
       auth.UserCredential result = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
+
+      auth.User user = result.user;
+      return user;
     } catch (e) {
       print(e.toString());
     }
