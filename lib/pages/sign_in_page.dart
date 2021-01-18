@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_crew_course/services/auth_services.dart';
 import 'package:get/get.dart';
 import 'sign_up_page.dart';
+import 'home_page.dart';
 
 class SignInPage extends StatefulWidget {
   @override
@@ -12,6 +14,27 @@ class _SignInPageState extends State<SignInPage> {
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  bool isLoading = false;
+
+  void signIn() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      formKey.currentState.save();
+      await AuthServices.signInWithEmailAndPassword(
+        emailController.text,
+        passwordController.text,
+      );
+      Get.offAll(HomePage());
+    } catch (e) {
+      print(e.toString());
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,25 +109,27 @@ class _SignInPageState extends State<SignInPage> {
                 SizedBox(
                   height: 30,
                 ),
-                Container(
-                  height: 44,
-                  width: double.infinity,
-                  child: RaisedButton(
-                    onPressed: () {},
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    color: Colors.blue,
-                    child: Text(
-                      "SIGN IN",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
+                isLoading
+                    ? CircularProgressIndicator()
+                    : Container(
+                        height: 44,
+                        width: double.infinity,
+                        child: RaisedButton(
+                          onPressed: signIn,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          color: Colors.blue,
+                          child: Text(
+                            "SIGN IN",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
                 SizedBox(
                   height: 12,
                 ),
@@ -121,7 +146,7 @@ class _SignInPageState extends State<SignInPage> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Get.offAll(SignUpPage());
+                        Get.to(SignUpPage());
                       },
                       child: Text(
                         "Sign Up",
