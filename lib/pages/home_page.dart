@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_crew_course/services/auth_services.dart';
+import 'package:flutter_chat_crew_course/widgets/chats/messages.dart';
+import 'package:flutter_chat_crew_course/widgets/chats/new_message.dart';
 import 'package:get/get.dart';
-import 'sign_up_page.dart';
+import 'sign_in_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -12,24 +14,27 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text("Home Page"),
-              SizedBox(
-                height: 20,
-              ),
-              RaisedButton(
-                onPressed: () async {
-                  await AuthServices.signOut();
-                  Get.offAll(SignUpPage());
-                },
-                child: Text("SIGN OUT"),
-              ),
-            ],
+      appBar: AppBar(
+        title: Text("Chat App"),
+        backgroundColor: Colors.blue,
+        actions: [
+          GestureDetector(
+            onTap: () async {
+              await AuthServices.signOut();
+              Get.offAll(SignInPage());
+            },
+            child: Icon(Icons.logout),
           ),
+        ],
+      ),
+      body: Container(
+        child: Column(
+          children: [
+            Expanded(
+              child: Messages(),
+            ),
+            NewMessage(),
+          ],
         ),
       ),
     );
