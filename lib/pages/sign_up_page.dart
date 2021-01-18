@@ -18,6 +18,26 @@ class _SignUpPageState extends State<SignUpPage> {
 
   bool isLoading = false;
 
+  void signUp() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      formKey.currentState.save();
+      await AuthServices.signUpWithEmailAndPassword(
+        fullnameController.text,
+        emailController.text,
+        passwordController.text,
+      );
+      Get.offAll(HomePage());
+    } catch (e) {
+      print(e);
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -125,32 +145,27 @@ class _SignUpPageState extends State<SignUpPage> {
                 SizedBox(
                   height: 30,
                 ),
-                Container(
-                  height: 44,
-                  width: double.infinity,
-                  child: RaisedButton(
-                    onPressed: () async {
-                      await AuthServices.signUpWithEmailAndPassword(
-                        fullnameController.text,
-                        emailController.text,
-                        passwordController.text,
-                      );
-                      Get.offAll(HomePage());
-                    },
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    color: Colors.blue,
-                    child: Text(
-                      "SIGN UP",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
+                isLoading
+                    ? CircularProgressIndicator()
+                    : Container(
+                        height: 44,
+                        width: double.infinity,
+                        child: RaisedButton(
+                          onPressed: signUp,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          color: Colors.blue,
+                          child: Text(
+                            "SIGN UP",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
                 SizedBox(
                   height: 12,
                 ),
@@ -167,7 +182,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Get.to(SignInPage());
+                        Get.offAll(SignInPage());
                       },
                       child: Text(
                         "Sign In",
