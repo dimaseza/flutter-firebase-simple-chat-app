@@ -1,4 +1,4 @@
-# flutter_chat_crew_course
+# Flutter Simple Chat App
 
 A new Flutter project.
 
