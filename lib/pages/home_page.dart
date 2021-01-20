@@ -15,6 +15,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    // Method cloud messaging
     final fbm = FirebaseMessaging();
     fbm.configure(
       onMessage: (msg) {
